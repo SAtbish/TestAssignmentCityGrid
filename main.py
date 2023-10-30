@@ -218,3 +218,18 @@ class CityGrid:
         plt.show()
 
 
+city = CityGrid(20, 20, r=2)
+city.display_info()
+path = None
+if len(city.towers) > 1:
+    path = city.find_path(city.towers[0], city.towers[-1])
+    if path is not None:
+        city.build_path_on_grid(path)
+        print(f"Displaying path between {city.towers[0]} and {city.towers[-1]}:")
+        city.display_grid()
+    else:
+        print("Path not found")
+else:
+    print("Only one tower placed")
+
+city.plot_grid(path=path)
