@@ -1,4 +1,7 @@
 from random import randint
+import matplotlib.pyplot as plt
+
+
 class CityGrid:
     """
     A class representing a grid for a city layout with towers.
@@ -118,3 +121,37 @@ class CityGrid:
                 if self.grid[i][j] == 0:
                     coverage += 1
         return coverage
+
+    def find_path(self, start: tuple[int, int], end: tuple[int, int]) -> list[tuple[int, int]] | None:
+        """
+        Finds a path between two towers with A*(A-star)
+
+        Args:
+            start (tuple[int, int]): The coordinates of the starting tower.
+            end (tuple[int, int]): The coordinates of the ending tower.
+
+        Returns:
+            list[tuple[int, int]]: List of coordinates representing the path.
+        """
+        open_list = [(0, start, [])]
+        closed_list = set()
+
+        while open_list:
+            _, (x, y), path = min(open_list)
+            open_list.remove((_, (x, y), path))
+
+            if (x, y) == end:
+                return path + [(x, y)]
+
+            if (x, y) in closed_list:
+                continue
+
+            closed_list.add((x, y))
+
+            for i in range(max(0, x - 1), min(self.n, x + 2)):
+                for j in range(max(0, y - 1), min(self.m, y + 2)):
+                    if (i != x or j != y) and self.grid[i][j] in ['#', '|']:
+                        open_list.append(
+                            (len(path) + 1 + abs(i - end[0]) + abs(j - end[1]), (i, j), path + [(x, y)]))
+
+        return None
