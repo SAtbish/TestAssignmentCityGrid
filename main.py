@@ -169,3 +169,52 @@ class CityGrid:
             self.grid[ttt_path[0][0]][ttt_path[0][1]] = "B"
             self.grid[ttt_path[-1][0]][ttt_path[-1][1]] = "E"
 
+    def display_info(self):
+        """Displays information about the current CityGrid."""
+        print("Displaying current CityGrid")
+        print(f"Count of towers - {len(self.towers)}")
+        print(f"Towers placed on: {self.towers}")
+        print(f"Grid {self.n} * {self.m}")
+        self.display_grid()
+
+    def display_grid(self):
+        """Displays the grid."""
+        for row in self.grid:
+            print(' '.join(map(str, row)))
+        print()
+
+    def plot_grid(self, path: list[tuple[int, int]] | None = None):
+        """
+        Plots the grid with optional path.
+
+        Args:
+            path (list[tuple[int, int]], optional): List of coordinates representing the path (default is None).
+        """
+        if path is None:
+            path = []
+        fig, ax = plt.subplots()
+        for i in range(self.n):
+            for j in range(self.m):
+                if self.grid[i][j] == 'X':
+                    ax.add_patch(plt.Rectangle((j, -i - 1), 1, 1, color='black', alpha=0.7))
+                elif self.grid[i][j] in ['#', '*']:
+                    ax.add_patch(plt.Rectangle((j, -i - 1), 1, 1, color='yellow'))
+                elif self.grid[i][j] == '|':
+                    ax.add_patch(plt.Rectangle((j, -i - 1), 1, 1, color='purple', alpha=0.7))
+                elif self.grid[i][j] == 'B':
+                    ax.add_patch(plt.Rectangle((j, -i - 1), 1, 1, color='green'))
+                elif self.grid[i][j] == 'E':
+                    ax.add_patch(plt.Rectangle((j, -i - 1), 1, 1, color='red'))
+
+        for i in range(len(path) - 1):
+            x1, y1 = path[i]
+            x2, y2 = path[i + 1]
+            plt.plot([y1 + 0.5, y2 + 0.5], [-x1 - 1 + 0.5, -x2 - 1 + 0.5], color='purple')
+        ax.set_aspect('equal', 'box')
+        ax.autoscale_view()
+        ax.set_xticks(range(self.m + 1))
+        ax.set_yticks(range(-self.n, 1))
+        ax.grid(True, color='black', linewidth=0.5)
+        plt.show()
+
+
