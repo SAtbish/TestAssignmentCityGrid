@@ -155,3 +155,17 @@ class CityGrid:
                             (len(path) + 1 + abs(i - end[0]) + abs(j - end[1]), (i, j), path + [(x, y)]))
 
         return None
+
+    def build_path_on_grid(self, ttt_path: list[tuple[int, int]]):
+        """
+        Marks the tower to tower path on the grid.
+
+        Args:
+            ttt_path (list[tuple[int, int]]): List of coordinates representing the tower to tower path.
+        """
+        for cord in ttt_path[1:-1]:
+            self.grid[cord[0]][cord[1]] = "*"
+        else:
+            self.grid[ttt_path[0][0]][ttt_path[0][1]] = "B"
+            self.grid[ttt_path[-1][0]][ttt_path[-1][1]] = "E"
+
